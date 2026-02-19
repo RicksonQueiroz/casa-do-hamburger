@@ -3,14 +3,59 @@ import Input from "../components/Input";
 import { useState } from "react";
 import Button from "../components/Button";
 const Cadastro = () => {
-  const [name, setName] = useState("");
+  const [nome, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [senha, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [cep, setCep] = useState("");
-  function handleSubmit(e: { preventDefault: () => void }) {
+  const [error, setError] = useState("");
+  async function handleSubmit(e: { preventDefault: () => void }) {
     e.preventDefault();
-    alert(name + email + password + confirmPassword + cep);
+
+    try {
+      if (!nome || !cep || !senha || !email) {
+        setError("Todas as informações devem ser preenchidas.");
+        return;
+      }
+      if (senha != confirmPassword) {
+        setError("As senhas não correspondem.");
+        return;
+      }
+
+      const response = await fetch("http://localhost:3000/cadastro", {
+        method: "POST",
+        headers: { "Content-Type": "application/JSON" },
+        body: JSON.stringify({ nome, email, senha, cep }),
+      });
+      console.log(response);
+      switch (response.status) {
+        case 409:
+          setError("E-mail já associado a uma conta.");
+          break;
+        case 400:
+          setError("Todos os campos são obrigatórios.");
+          break;
+        case 201:
+          setError("");
+          setName("");
+          setCep("");
+          setConfirmPassword("");
+          setPassword("");
+          setEmail("");
+          break;
+        case 500:
+          setError("Serviço indisponível, tente novamente mais tarde");
+          break;
+        default:
+          setError("");
+          break;
+      }
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      // console.log(error);
+      return;
+    }
   }
   return (
     <form
@@ -26,27 +71,33 @@ const Cadastro = () => {
           placeholder="E-mail"
           onChange={(e) => setEmail(e.target.value)}
           type="email"
+          value={email}
         />
         <Input
           placeholder="Senha"
           onChange={(e) => setPassword(e.target.value)}
           type="password"
+          value={senha}
         />
         <Input
           placeholder="Confirme sua senha"
           onChange={(e) => setConfirmPassword(e.target.value)}
           type="password"
+          value={confirmPassword}
         />
         <Input
           placeholder="CEP"
           onChange={(e) => setCep(e.target.value)}
           type="text"
+          value={cep}
         />
-
-        <Button title="Criar conta" />
-        <Link to="/login">
-          <Button title="Já tenho uma conta" variant="outline" />
-        </Link>
+        <p className="text-red-400 font-bold">{error}</p>
+        <div className="mt-2 flex flex-col gap-2">
+          <Button title="Criar conta" type="submit" />
+          <Link to="/login">
+            <Button title="Já tenho uma conta" variant="outline" />
+          </Link>
+        </div>
       </div>
     </form>
   );

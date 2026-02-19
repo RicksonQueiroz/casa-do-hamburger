@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import { Outlet } from "react-router";
 import Header from "./components/Header";
 import Pedidos from "./pages/Pedidos";
+import PublicRoutes from "./components/PublicRoutes";
 
 const Layout = () => {
   return (
@@ -32,10 +33,18 @@ export const router = createBrowserRouter([
 
   {
     path: "/login",
-    element: <Login />,
+    element: (
+      <PublicRoutes>
+        <Login />,
+      </PublicRoutes>
+    ),
   },
   {
     path: "cadastro",
-    element: <Cadastro />,
+    element: (
+      <PublicRoutes>
+        <Cadastro />,
+      </PublicRoutes>
+    ),
   },
 ]);
