@@ -1,3 +1,5 @@
+import type { SetStateAction } from "react";
+
 export type ProductType = {
   [x: string]: any;
   id: number;
@@ -6,4 +8,6 @@ export type ProductType = {
   price: number;
   image: string;
   category: string;
+  setProduct: React.Dispatch<SetStateAction<ProductType[]>>;
+  onDelete: (id: number) => void;
 };
