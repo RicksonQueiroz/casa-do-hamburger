@@ -14,6 +14,7 @@ model User {
   password String
   cep String
   admin Boolean @default(false)
+  CartItems CartItem[]
 }
 model Product{
   id Int @id @default(autoincrement())
@@ -23,4 +24,12 @@ model Product{
   image String
   createdAt DateTime @default(now())
   category String @default("")
+  CartItems CartItem[]
+}
+model CartItem{
+  id Int @id @default(autoincrement())
+  productId Int 
+  product Product @relation(fields: [productId], references: [id])
+  userId Int
+  user User @relation(fields: [userId], references: [id])
 }
