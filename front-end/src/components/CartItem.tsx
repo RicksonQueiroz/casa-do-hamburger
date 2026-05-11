@@ -1,12 +1,21 @@
 import { ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { formatter } from "../utils/utils";
 
-const CartItem = () => {
+type CartItemType = {
+  title: string;
+  price: number;
+  img: string;
+  id: number;
+};
+
+const CartItem = ({ title, price, img, id }: CartItemType) => {
   return (
     <div className="flex gap-3 items-center ">
-      <img src="./batata-frita.png" alt="" className="w-[100px] rounded-md " />
+      <img src={img} alt="" className="w-[100px] rounded-md " />
       <div className="flex-1">
-        <p className="uppercase font-bold">Duplo da casa</p>
-        <p className="font-bold text-white">R$28,99</p>
+        <p className="uppercase font-bold">{title}</p>
+        <p className="font-bold text-white">{formatter(price)}</p>
         <div className="flex gap-3 mt-2">
           <div className="bg-[#b72f18] cursor-pointer p-1 rounded-md text-[#f2daac]">
             <ChevronLeft size={20} />
@@ -18,7 +27,7 @@ const CartItem = () => {
         </div>
       </div>
       <div>
-        <Trash2 className="cursor-pointer" />
+        <Trash2 className="cursor-pointer" onClick={() => alert(id)} />
       </div>
     </div>
   );

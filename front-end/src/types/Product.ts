@@ -8,6 +8,6 @@ export type ProductType = {
   price: number;
   image: string;
   category: string;
-  setProduct: React.Dispatch<SetStateAction<ProductType[]>>;
+  setProduct?: React.Dispatch<SetStateAction<ProductType[]>>;
   onDelete: (id: number) => void;
 };
