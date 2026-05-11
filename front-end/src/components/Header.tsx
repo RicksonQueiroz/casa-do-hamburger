@@ -3,10 +3,12 @@ import { UserContext } from "../contexts/UserContext";
 import { useContext, useEffect, useState } from "react";
 import { LogOut, ShoppingCart, Box, LayoutDashboard, Plus } from "lucide-react";
 import Cart from "./Cart";
+import { CartItemContext } from "../contexts/CartItemsContext";
 
 const Header = () => {
   const [showCart, setShowCart] = useState<boolean>(false);
   const { user, setUser } = useContext(UserContext);
+  const { cartItems } = useContext(CartItemContext);
   const location = useLocation();
   const handleAuthUser = async () => {
     try {
@@ -92,7 +94,7 @@ const Header = () => {
             <div className="relative cursor-pointer">
               <ShoppingCart onClick={() => setShowCart(!showCart)} />
               <p className="absolute -top-4 -right-2 bg-[#f2dcaa] rounded-full w-5 h-5 text-center text-sm font-bold text-black">
-                1
+                {cartItems.length}
               </p>
             </div>
             <p className="text-white cursor-pointer">{user.name}</p>
